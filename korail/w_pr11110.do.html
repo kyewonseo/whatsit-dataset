@@ -1,0 +1,1662 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <link href="/bt/css/bt_style.css" rel="stylesheet" type="text/css" />
+    <LINK type="text/css" rel="stylesheet" href="/docs/css/pr/autocomplete_stations.css">
+    <title>즉시 예약</title>
+
+    <script type="text/javascript" src="/bt/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/bt/js/bt_korail.js"></script>
+    <script type="text/javascript" src="/bt/js/chk_schedule.js?v=1503973790441"></script>
+    <script type="text/javascript" src="/docs/js/pr/autocomplete_stations.js?1503973790441"></script>
+</head>
+
+<body oncontextmenu="return false" ondragstart="return false">
+
+<form name="form1" id="form1" method="post">
+<input type="hidden" name="key" value="2749E3CB2371F5F186059124751F3E85D4FD1EA5FF2744D1F15159671B3851DF5485BB5FF24A8032947F49888D8B1551"/>
+<input type="hidden" name="txtGoStart1_1Code" value="">
+<input type="hidden" name="txtGoStart2_1Code" value="">
+<input type="hidden" name="txtGoEnd1_1Code" value="">
+<input type="hidden" name="txtGoEnd2_1Code" value="">
+
+<div id="wrap" tabindex="0" title="즉시예약화면. 출발시간 또는 열차번호를 입력하여 예약합니다.">
+<div id="container_page">
+    <div id="sub_top">
+      <h1><span>한국철도공사</span></h1>
+      <p><img src="/bt/images/sub_topimg.png" alt="풍성한 한가위 보내세요" tabindex="0"/></p>
+      <span tabindex="0" id=ttsTime class="ttsHidden"></span>
+    </div>
+    <!--s:횟수시간안내-->
+    <div id="page_time"  tabindex="-1">
+        <dl class="time_box">
+            <dt>예약요청 횟수</dt>
+            <dd><span class="number" id=divCallCount></span>회 / 6회 (총횟수)</dd>
+        </dl>
+        <dl class="time_box">
+            <dt>예약가능 시간</dt>
+            <dd><span id=divRestTime></span> / 3분 (총시간)</dd>
+        </dl>
+        <dl class="time_box noline">
+            <dt>자동 로그아웃 대기시간</dt>
+            <dd><span class="number" id=divRestTime2>60</span>초 동안 입력이 없으면 자동 로그아웃</dd>
+        </dl>
+    </div>
+    <!--e:횟수시간안내-->
+
+    <!--s:메뉴-->
+    <ul class="sub_menu">
+        <li class="on noline"><a href="javascript:void(0)" name=btn id=btn1 tabindex="0" title="즉시예약이 선택되었습니다">즉시예약</a></li>
+        <li                  ><a href="javascript:void(0)" name=btn id=btn2 tabindex="0">잔여석 조회</a></li>
+        <li                  ><a href="javascript:void(0)" name=btn id=btn3 tabindex="0">예약내역</a></li>
+        <li                  ><a href="javascript:void(0)" name=btn id=btn4 tabindex="0">로그아웃</a></li>
+    </ul>
+    <!--e:메뉴-->
+    <div style="clear:both;"></div>
+
+    <!--s:컨텐츠 내용-->
+    <div id="contents_box">
+        <!--s:저장하기/불러오기-->
+        <div class="temp_box">
+            <a href="javascript:void(0)" id="btnSave" class="btn_save" tabindex="0" title="입력하신 여정정보를 기본값으로 셋팅할 수 있습니다.">여정정보 저장하기</a>
+            <p id="saveMsg">입력하신 여정정보를 기본값으로 셋팅할 수 있습니다.</p>
+        </div>
+        <!--e:저장하기/불러오기-->
+
+        <!--s:좌측-->
+        <div class="half_box">
+            <!--s:회원정보-->
+            <div class="inbox">
+                <div class="sub_title" tabindex="0">회원정보</div>
+                <table border="0" cellpadding="0" cellspacing="1" class="table_01" summary="회원정보">
+                <colgroup>
+                    <col width="95" />
+                    <col width="" />
+                </colgroup>
+                  <tr>
+                    <th>고객명</th>
+                    <td>윤영복</td>
+                  </tr>
+                </table>
+            </div>
+            <!--e:회원정보-->
+
+            <!--s:승차인원정보-->
+            <div class="inbox" id=dPsInfo tabindex="0">
+                <div class="sub_title">승차인원정보</div>
+                <table border="0" cellpadding="0" cellspacing="1" class="table_01" summary="승차인원정보 입력">
+                <colgroup>
+                    <col width="95" />
+                    <col width="" />
+                </colgroup>
+                  <tr>
+                    <th>일반승객</th>
+                    <td>
+                    <select name="txtPsgFlg_1" onchange="checkMaxPassenger(1)">
+                      <option value="0">어른 0명</option>
+                      <option value="1" selected>어른 1명</option>
+                      <option value="2">어른 2명</option>
+                      <option value="3">어른 3명</option>
+                      <option value="4">어른 4명</option>
+                      <option value="5">어른 5명</option>
+                      <option value="6">어른 6명</option>
+                    </select>
+                    <select name="txtPsgFlg_2" onchange="checkMaxPassenger(2)">
+                      <option value="0">만4세~12세</option>
+                      <option value="1">어린이 1명</option>
+                      <option value="2">어린이 2명</option>
+                      <option value="3">어린이 3명</option>
+                      <option value="4">어린이 4명</option>
+                      <option value="5">어린이 5명</option>
+                      <option value="6">어린이 6명</option>
+                    </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>할인적용승객</th>
+                    <td>
+                    <select name="txtPsgFlg_3" onchange="checkMaxPassenger(3)">
+                      <option value="0">장애1-3급 0명</option>
+                      <option value="1">장애1-3급 1명</option>
+                      <option value="2">장애1-3급 2명</option>
+                      <option value="3">장애1-3급 3명</option>
+                      <option value="4">장애1-3급 4명</option>
+                      <option value="5">장애1-3급 5명</option>
+                      <option value="6">장애1-3급 6명</option>
+                    </select>
+                    <select name="txtPsgFlg_7" onchange="checkMaxPassenger(7)">
+                      <option value="0">장애4-6급 0명</option>
+                      <option value="1">장애4-6급 1명</option>
+                      <option value="2">장애4-6급 2명</option>
+                      <option value="3">장애4-6급 3명</option>
+                      <option value="4">장애4-6급 4명</option>
+                      <option value="5">장애4-6급 5명</option>
+                      <option value="6">장애4-6급 6명</option>
+                    </select>
+                    <div style="height:3px;"></div>
+                    <select name="txtPsgFlg_5" onchange="checkMaxPassenger(5)">
+                      <option value="0">만65세이상</option>
+                      <option value="1">경로 1명</option>
+                      <option value="2">경로 2명</option>
+                      <option value="3">경로 3명</option>
+                      <option value="4">경로 4명</option>
+                      <option value="5">경로 5명</option>
+                      <option value="6">경로 6명</option>
+                    </select></td>
+                  </tr>
+                </table>
+            </div>
+
+            <div class="inbox" id=dPsInfo2 style="display:none">
+                <div class="sub_title" tabindex="0">승차인원정보</div>
+                <table border="0" cellpadding="0" cellspacing="1" class="table_01" summary="승차인원정보 입력">
+                <colgroup>
+                    <col width="95" />
+                    <col width="" />
+                </colgroup>
+                  <tr>
+                    <th>일반승객</th>
+                    <td>
+                    <select name="txtSetFlg_1">
+                      <option value="4">1Set</option>
+                    </select>
+                    </td>
+                  </tr>
+                </table>
+            </div>
+
+            <!--e:승차인원정보-->
+        </div>
+        <!--e:좌측-->
+
+        <!--s:우측-->
+        <div class="half_box">
+            <div class="inbox">
+                <div class="sub_title" tabindex="0">열차정보</div>
+                <table border="0" cellpadding="0" cellspacing="1" class="table_01" summary="열차정보 입력">
+                <colgroup>
+                    <col width="16%" />
+                    <col width="5%" />
+                    <col width="37%" />
+                    <col width="5%" />
+                    <col width="37%" />
+                </colgroup>
+                <tr>
+                    <th>구분</th>
+                    <td colspan="2" align="center" style="background-color:#f5f7fa;">왕편(가는열차)</td>
+                    <td colspan="2" align="center" style="background-color:#f5f7fa;">복편(오는열차)<span class="last">
+                      <input type="checkbox" name="chkEnableCome" id="chkEnableCome" value="checkbox" onClick="Javascript:enableComeTrain()" title="복편(오는열차)" />
+                    </span></td>
+                </tr>
+                <tr>
+                    <th>직통/환승</th>
+                    <td colspan="2"><input type="radio" name="radJobId1" value="1" onclick="javascript:enableRadJob()" title="왕편-직통" checked="checked" />
+                      직통
+                      <input type="radio" name="radJobId1" value="2" onclick="javascript:enableRadJob()" title="왕편-환승" />
+                      환승
+                    </td>
+                    <td colspan="2"><input type="radio" name="radJobId2" value="1" onclick="javascript:enableRadJob()" title="복편-직통" checked="checked" disabled />
+                      직통
+                      <input type="radio" name="radJobId2" value="2" onclick="javascript:enableRadJob()" title="복편-환승" disabled />
+                      환승
+                    </td>
+                </tr>
+                <tr>
+                    <th>출발역</th>
+                    <td colspan="2"><input name="txtGoStart1_1" type="text" class="input" style="width:100px;ime-mode:active" value="서울" title="왕편-출발역"/>
+                      <a href="javascript:void(0)" onclick="btnPopWin('txtGoStart1_1')" title="왕편-출발역찾기"><img src="/bt/images/btn_search.gif" class="hand" /></a></td>
+                    <td colspan="2"><input name="txtGoStart2_1" type="text" class="input" style="width:100px;ime-mode:active" value="부산" title="복편-출발역" disabled/>
+                      <a href="javascript:void(0)" onclick="btnPopWin('txtGoStart2_1')" title="복편-출발역찾기" id="searchDptStn2" disabled><img src="/bt/images/btn_search.gif" class="hand" /></a></td>
+                </tr>
+                <tr>
+                    <th>도착역</th>
+                    <td colspan="2"><input name="txtGoEnd1_1" type="text" class="input" style="width:100px;ime-mode:active" value="부산" title="왕편-도착역"/>
+                      <a href="javascript:void(0)" onclick="btnPopWin('txtGoEnd1_1')" title="왕편-도착역찾기"><img src="/bt/images/btn_search.gif" class="hand" /></td>
+                    <td colspan="2"><input name="txtGoEnd2_1" type="text" class="input" style="width:100px;ime-mode:active" value="서울" title="복편-도착역" disabled/>
+                      <a href="javascript:void(0)" onclick="btnPopWin('txtGoEnd2_1')" title="복편-도착역찾기" id="searchArvStn2" disabled><img src="/bt/images/btn_search.gif" class="hand" /></td>
+                </tr>
+                <tr>
+                    <th class="point">출발일</th>
+                    <td colspan="2"><select name="selGoMMDD1_1" onChange="isValidDateSetting(form1.selGoYear, form1.selGoMMDD1_1, form1.selGoHour1_1, form1.txtGoYoil1_1);" title="왕편-출발일">
+
+                            <option value="0929">09월 29일</option>
+
+                            <option value="0930">09월 30일</option>
+
+                            <option value="1001">10월 01일</option>
+
+                            <option value="1002">10월 02일</option>
+
+                            <option value="1003">10월 03일</option>
+
+                            <option value="1004">10월 04일</option>
+
+                            <option value="1005">10월 05일</option>
+
+                            <option value="1006">10월 06일</option>
+
+                            <option value="1007">10월 07일</option>
+
+                            <option value="1008">10월 08일</option>
+
+                            <option value="1009">10월 09일</option>
+
+                        </select>
+                        <input type="text" name="txtGoYoil1_1" class="input" style="width:20px;" value="" title="왕편-요일" readonly>
+                    </td>
+                    <td colspan="2"><select name="selGoMMDD2_1" onChange="isValidDateSetting(form1.selGoYear, form1.selGoMMDD2_1, form1.selGoHour2_1, form1.txtGoYoil2_1);" title="복편-출발일" disabled>
+
+                            <option value="0929">09월 29일</option>
+
+                            <option value="0930">09월 30일</option>
+
+                            <option value="1001">10월 01일</option>
+
+                            <option value="1002">10월 02일</option>
+
+                            <option value="1003">10월 03일</option>
+
+                            <option value="1004">10월 04일</option>
+
+                            <option value="1005">10월 05일</option>
+
+                            <option value="1006">10월 06일</option>
+
+                            <option value="1007">10월 07일</option>
+
+                            <option value="1008">10월 08일</option>
+
+                            <option value="1009">10월 09일</option>
+
+                        </select>
+                        <input type="text" name="txtGoYoil2_1" class="input" style="width:20px;" value="" title="복편-요일" readonly disabled>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th class="point">출발시각</th>
+                    <td class="nopdd point"><input type="radio" name="radTrainNo1_1" value="1" onclick="javascript:enableTrainNo()" title="왕편-출발시각으로 예약" checked="checked" /></td>
+                    <td><select name="selGoHour1_1" title="왕편-출발시">
+                        <option value="">선택</option>
+                        <option value="00">0</option>
+                        <option value="01">1</option>
+                        <option value="02">2</option>
+                        <option value="03">3</option>
+                        <option value="04">4</option>
+                        <option value="05">5</option>
+                        <option value="06">6</option>
+                        <option value="07">7</option>
+                        <option value="08">8</option>
+                        <option value="09">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        </select>
+                        시
+                        <select name="selGoMinute1_1" title="왕편-출발분">
+                        <option value="00">00</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="40">40</option>
+                        <option value="50">50</option>
+                        </select>
+                        분
+                    </td>
+
+                    <td class="nopdd point"><input type="radio" name="radTrainNo2_1" value="3" onclick="javascript:enableTrainNo2()" title="복편-출발시각으로 예약" checked="checked" disabled /></td>
+                    <td><select name="selGoHour2_1" title="복편-출발시" disabled>
+                        <option value="">선택</option>
+                        <option value="00">0</option>
+                        <option value="01">1</option>
+                        <option value="02">2</option>
+                        <option value="03">3</option>
+                        <option value="04">4</option>
+                        <option value="05">5</option>
+                        <option value="06">6</option>
+                        <option value="07">7</option>
+                        <option value="08">8</option>
+                        <option value="09">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        </select>
+                        시
+                        <select name="selGoMinute2_1" title="복편-출발분" disabled>
+                        <option value="00">00</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="40">40</option>
+                        <option value="50">50</option>
+                        </select>
+                        분
+                    </td>
+                </tr>
+                <tr>
+                    <th class="point">열차번호</th>
+
+                    <td class="nopdd point"><input type="radio" name="radTrainNo1_1" value="2" onclick="javascript:enableTrainNo()" title="왕편-열차번호로 예약" /></td>
+                    <td><input type="text" name="txtTrainNo1_1" class="input" style="width:100px;ime-mode:active" maxlength="5" title="왕편-열차번호" disabled/></td>
+
+                    <td class="nopdd point"><input type="radio" name="radTrainNo2_1" value="4" onclick="javascript:enableTrainNo2()" title="복편-열차번호로 예약" disabled/></td>
+                    <td><input type="text" name="txtTrainNo2_1" class="input" style="width:100px;ime-mode:active" maxlength="5" title="복편-열차번호" disabled/></td>
+                </tr>
+                <tr>
+                    <th>열차종별</th>
+                    <td colspan="2"><select name="selGoTrain1_1" title="왕편-열차종별">
+                        <option value="00" selected>KTX</option>
+                        <option value="09">ITX-청춘</option>
+                        <option value="08">ITX-새마을</option>
+                        <option value="01">새마을호</option>
+                        <option value="04">누리로</option>
+                        <option value="02">무궁화호</option>
+                        <option value="05">전체</option>
+                        </select>
+                    </td>
+
+                    <td colspan="2"><select name="selGoTrain2_1" title="복편-열차종별" disabled>
+                        <option value="00" selected>KTX</option>
+                        <option value="09">ITX-청춘</option>
+                        <option value="08">ITX-새마을</option>
+                        <option value="01">새마을호</option>
+                        <option value="04">누리로</option>
+                        <option value="02">무궁화호</option>
+                        <option value="05">전체</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>차실</th>
+                    <td colspan="2"><select name="selGoRoom1_1" onChange="checkSeatAttr(1)" title="왕편-차실">
+                        <option value="1">일반실 </option>
+                        <option value="2">특실   </option>
+                        <option value="018">2층석</option>
+                        </select>
+                    </td>
+
+                    <td colspan="2"><select name="selGoRoom2_1" onChange="checkSeatAttr(2)" title="복편-차실" disabled>
+                        <option value="1">일반실 </option>
+                        <option value="2">특실   </option>
+                        <option value="018">2층석</option>
+                        </select>
+                    </td>
+                </tr>
+                </table>
+            </div>
+        </div>
+        <!--e:우측-->
+
+        <p style="font-weight:bold; line-height:1.2em;" tabindex="0">
+        * "여정정보 저장하기" 버튼으로 여정정보를 미리 저장해놓으면 <font color="red">저장한 PC</font>에서 여정정보가 그대로 유지됩니다.<br/>
+        * "여정정보 저장하기"는 예약기능이 아니므로 <font color="red">반드시 "예약요청" 버튼</font>을 눌러야 예약이 됩니다.<br/>
+        * <font color="red">인터넷기록을 삭제하거나 웹브라우저 설정이 변경되면</font> 저장된 여정정보를 불러올 수 없습니다.<br/>
+        * 대상기간 : 2017.9.29.(금)~10.4.(수,추석)~10.9.(월), 11일간<br/>
+        * 관광열차(O,V,S,DMZ,정선아리랑,서해금빛열차)는 열차종별을 '전체'로 선택하여야만 예약 가능합니다.<br/>
+        * 4인동반석, 휠체어석, 전동휠체어석은 <a href="javascript:void(0)" onclick="parent.control.callService('btn2');" tabindex="-1">잔여석 조회예약</a>에서 예약할 수 있습니다.<br/>
+        * 좌석이 매진되면 <a href="javascript:void(0)" onclick="parent.control.callService('btn2');" tabindex="-1">잔여석 조회예약</a>에서 기본 좌석종류에 직통으로 열차조회시 <font color="red">예약대기</font>를 신청할 수 있으며, 예약횟수와 예약대기신청횟수는 동일하게 처리됩니다.</p>
+
+        <!--s:버튼-->
+        <p class="c" style="margin:20px 0;">
+            <a href="javascript:void(0)" class="btn_blue_01" id="btnReserve" title="예약요청">예약요청</a>
+        </p>
+        <!--e:버튼-->
+
+        <!--s:이용안내-->
+        <div class="use_info">
+            <ul class="list_info">
+                <li class="title" tabindex="0"><font size="-2">▶</font>이용안내</li>
+                <li tabindex="0">출발시각 또는 열차번호 중 하나만 선택 가능합니다.<br/>
+                 - 출발시각 : 열차종별 선택 (출발시각을 선택한 경우, 3시간 이내 가장 빠른 열차로 자동 예약됩니다.)<br/>
+                 - 열차번호 : 열차종별 선택 필요 없음
+                </li>
+                <li class="blue" tabindex="0">편도승차권을 예약하는 경우는 열차정보의 "왕편(가는열차)"만 입력하고 예약요청하십시요. (복편체크박스 해제)
+                </li>
+                <li tabindex="0">환승승차권은 출발시각만 선택 가능합니다.<br/>
+                 - 환승승차권은 KTX를 포함(예:KTX+무궁화호, 새마을호+KTX)하여 예약됩니다.
+                </li>
+                <li class="blue" tabindex="0">예약요청 시 해당열차의 잔여석 부족으로 예약되지 않을 수 있습니다.</li>
+                <li class="blue" tabindex="0">왕복승차권은 일부가 매진된 경우 잔여석이 있는 경로(왕편 또는 복편)만 예약됩니다.</li>
+                <li class="blue" tabindex="0">명절승차권은 1인당 최대 12매(회당 6매이내)까지 예약 가능합니다.</li>
+            </ul>
+        </div>
+        <!--e:이용안내-->
+    </div>
+    <!--e:컨텐츠 내용-->
+
+
+	<!--s:서브하단 info메뉴-->
+	<div class="sub_info">
+		<div class="m01"><a href="#" name=menu4>공지사항</a></div>
+		<div class="m02"><a href="#" name=menu5>예약방법 안내</a></div>
+		<div class="m03"><a href="#" name=menu6>잔여석 현황</a></div>
+	</div>
+	<div class="clear"></div>
+	<!--e:서브하단 info메뉴-->
+	<div class="copyright">Copyright ⓒ KOREA RAILROAD All Rights reserved.</div>
+
+<script>
+$(document).ready(function(){
+	// button click
+	$('a[name^=menu]').click(function(e){
+		var name = $(this).attr('name');
+		var no = name.substring(4);
+		e.preventDefault();
+		btnControl(no);
+	});
+
+	function btnControl(inx){
+		var timestamp = (new Date()).getTime();
+
+		if (inx==4){ // 공지사항
+			var w = 830;
+			var h = 820;
+			var win_style = 'left='+(screen.width-w)/2+',top='+(screen.height-h)/2+',toolbar=no, location=no, directories=no,status=no,menubar=no,scrollbars=no,resizable=yes,width='+w+',height='+h;
+			var pop  = window.open('','popWin4', win_style);
+			pop.location.href = '/bt/guide_popup_all_info.html?'+timestamp;
+			pop.focus();
+		}else if (inx==5){ // 예약방법
+			var w = 1010;
+			var h = 980;
+			var win_style = 'left='+(screen.width-w)/2+',top='+(screen.height-h)/2+',toolbar=no, location=no, directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width='+w+',height='+h;
+			var pop  = window.open('','popWin5', win_style);
+			pop.location.href = '/bt/guide_bt.html?'+timestamp;
+			pop.focus();
+		}else if (inx==6){ // 주요시간별 잔여석현황
+			var w = 810;
+			var h = 820;
+			var win_style = 'left='+(screen.width-w)/2+',top='+(screen.height-h)/2+',toolbar=no, location=no, directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width='+w+',height='+h;
+			var pop = window.open('','popWin6', win_style);
+			pop.location.href = '/bt/bt11200/w_bt11230.html?'+timestamp;
+			pop.focus();
+		}else if (inx==0){
+			parent.location.href = '/index.jsp';
+		}
+	}
+});
+</script>
+</div>
+
+
+<input type="hidden" name=dataType       value="A">
+
+<input type="hidden" name=radIngrDvCd    value="5">
+<input type="hidden" name=txtTotPsgCnt   value=0>
+
+<input type="hidden" name=txtSeatAttCd1  value="000">
+<input type="hidden" name=txtSeatAttCd2  value="000">
+<input type="hidden" name=txtSeatAttCd3  value="000">
+<input type="hidden" name=txtSeatAttCd4  value="015">
+<input type="hidden" name=txtSeatAttCd5  value="000">
+
+<input type="hidden" name=txtJrnyCnt     value="">
+
+<input type="hidden" name=txtCompaCnt1    value=0>
+<input type="hidden" name=txtCompaCnt2    value=0>
+<input type="hidden" name=txtCompaCnt3    value=0>
+<input type="hidden" name=txtCompaCnt4    value=0>
+<input type="hidden" name=txtCompaCnt5    value=0>
+<input type="hidden" name=txtCompaCnt6    value=0>
+<input type="hidden" name=txtCompaCnt7    value=0>
+
+<input type="hidden" name=txtPsgTpCd1     value="1">
+<input type="hidden" name=txtPsgTpCd2     value="3">
+<input type="hidden" name=txtPsgTpCd3     value="1">
+<input type="hidden" name=txtPsgTpCd4     value="3">
+<input type="hidden" name=txtPsgTpCd5     value="1">
+<input type="hidden" name=txtPsgTpCd6     value="1">
+<input type="hidden" name=txtPsgTpCd7     value="1">
+
+<input type="hidden" name=txtDiscKndCd1   value="000">
+<input type="hidden" name=txtDiscKndCd2   value="000">
+<input type="hidden" name=txtDiscKndCd3   value="111">
+<input type="hidden" name=txtDiscKndCd4   value="">
+<input type="hidden" name=txtDiscKndCd5   value="131">
+<input type="hidden" name=txtDiscKndCd6   value="">
+<input type="hidden" name=txtDiscKndCd7   value="112">
+
+<input type="hidden" name=selGoYear       value="2017">
+
+<input type="hidden" name=hidGoTrain1_1   value="">
+<input type="hidden" name=hidTrainNo1_1   value="">
+<input type="hidden" name=hidGoTrain2_1   value="">
+<input type="hidden" name=hidTrainNo2_1   value="">
+
+<input type="hidden" name=selGoSeat       value="015">
+<input type="hidden" name=txtJobId        value="1191">
+
+<input type="hidden" name=hidGoRoom1_1>
+<input type="hidden" name=hidGoRoom2_1>
+
+<input type="hidden" name=txtComeFlag     value="false">
+
+<input type="hidden" name=txtTrnNoFlag    value="false">
+<input type="hidden" name=txtTrnNoFlag1_1 value="false">
+<input type="hidden" name=txtTrnNoFlag2_1 value="false">
+
+<input type="hidden" name=txtDptDt1_1     value="">
+<input type="hidden" name=txtDptDt2_1     value="">
+<input type="hidden" name=txtDptTm1_1     value="">
+<input type="hidden" name=txtDptTm2_1     value="">
+</form>
+
+</body>
+
+<script type="text/javascript">
+function dw_IsNull(string) {
+    return string==""?true:false;
+}
+function dw_IsNumeric(string) {
+    if (dw_IsNull(string)) return false;
+
+    for (var i = 0; i < string.length; i++) {
+        if (string.charAt( i ) != '') {
+            if (string.charAt( i ) >= '0' && string.charAt( i ) <= '9') continue;
+            else return false;
+        }
+        continue;
+    }
+    return true;
+}
+function trim(pm_sStr) {
+    var lm_sRegExp = /(\s+)/g;
+    var lm_sRetStr = pm_sStr.replace(lm_sRegExp,'');
+    return lm_sRetStr;
+}
+
+// 버튼을 눌렀는지 아닌지를 검사하기 위한 플래그
+//var bClickComplete = false;
+
+/*----------------------------------------------------------------------------*/
+/* 승차인원 정보의 Validation 확인                                            */
+/*----------------------------------------------------------------------------*/
+function checkCompaCnt() {
+    var thisForm = document.form1;
+
+    //  총 인원수가 지정된 인원을 초과하지 않는지 확인한다
+    with (thisForm) {
+        var a = parseInt(txtPsgFlg_1.value,10);
+        var b = parseInt(txtPsgFlg_2.value,10);
+        var c = parseInt(txtPsgFlg_3.value,10);
+    //  var d = parseInt(txtPsgFlg_4.value,10);
+        var e = parseInt(txtPsgFlg_5.value,10);
+    //  var f = parseInt(txtPsgFlg_6.value,10);
+        var g = parseInt(txtPsgFlg_7.value,10);
+    }
+    var sum = a + b + c + e + g;
+    if (sum < 1) {
+        alert('최소 1명 이상을 선택하셔야 합니다.');
+        thisForm.txtPsgFlg_1.focus();
+        return false;
+    }
+    if (sum > 6) {
+        alert('예약가능한 인원은 총 6명 입니다');
+        thisForm.txtPsgFlg_1.focus();
+        return false;
+    }
+    thisForm.txtTotPsgCnt.value = sum;
+
+    return true;
+}
+
+function checkMaxPassenger(pSelectIndex) {
+    var thisForm = document.form1;
+    var selectindex = pSelectIndex;
+
+    //  총 인원수가 지정된 인원을 초과하지 않는지 확인한다
+    with (thisForm) {
+        var a = parseInt(txtPsgFlg_1.value,10); // 어른
+        var b = parseInt(txtPsgFlg_2.value,10); // 어린이
+        var c = parseInt(txtPsgFlg_3.value,10); // 장애1-3급
+    //  var d = parseInt(txtPsgFlg_4.value,10);
+        var e = parseInt(txtPsgFlg_5.value,10); // 경로
+    //  var f = parseInt(txtPsgFlg_6.value,10);
+        var g = parseInt(txtPsgFlg_7.value,10); // 장애4-6급
+    }
+    var sum = a + b + c + e + g;
+    if (sum > 6) {
+        alert('예약가능한 인원은 총 6명 입니다');
+
+        if (selectindex == 1) thisForm.txtPsgFlg_1.selectedIndex = 0;
+        if (selectindex == 2) thisForm.txtPsgFlg_2.selectedIndex = 0;
+        if (selectindex == 3) thisForm.txtPsgFlg_3.selectedIndex = 0;
+      //if (selectindex == 4) thisForm.txtPsgFlg_4.selectedIndex = 0;
+        if (selectindex == 5) thisForm.txtPsgFlg_5.selectedIndex = 0;
+      //if (selectindex == 6) thisForm.txtPsgFlg_6.selectedIndex = 0;
+        if (selectindex == 7) thisForm.txtPsgFlg_7.selectedIndex = 0;
+    }
+}
+
+/*----------------------------------------------------------------------------*/
+/* 열차정보의 Validation 확인                                                 */
+/*----------------------------------------------------------------------------*/
+function corectionTrainInfo(trainNumber) {
+    var trainNumberLength = trainNumber.length;
+    var trainNumberChar = trainNumber;
+    if (trainNumberLength >= 5) return trainNumberChar;
+
+    var correctionChar = '0';
+    var gap = 5 - trainNumberLength;
+    for (gap; gap > 0; gap--) {
+        trainNumberChar = correctionChar + trainNumberChar;
+    }
+    //alert('보정된 열차번호입니다. : ' + trainNumberChar);
+    return trainNumberChar;
+}
+
+function checkTrainInfo() {
+    var thisForm = document.form1;
+
+    //왕편 출발역 공백을 제거한다.
+    thisForm.txtGoStart1_1.value = trim(thisForm.txtGoStart1_1.value);
+
+    // 왕편 정보 확인
+    if (thisForm.txtGoStart1_1.value == '') {
+        alert('왕편(가는열차) 출발역을 입력하여 주십시오');
+        thisForm.txtGoStart1_1.focus();
+        return false;
+    }
+
+    //왕편 도착역 공백을 제거한다.
+    thisForm.txtGoEnd1_1.value = trim(thisForm.txtGoEnd1_1.value);
+    if (thisForm.txtGoEnd1_1.value == '') {
+        alert('왕편(가는열차) 도착역을 입력하여 주십시오');
+        thisForm.txtGoEnd1_1.focus();
+        return false;
+    }
+
+
+    //여수expo 2011.12.16 ljy nhj
+    var tGoStart = thisForm.txtGoStart1_1.value.toUpperCase();
+    var tGoEnd   = thisForm.txtGoEnd1_1  .value.toUpperCase();
+
+    if (tGoStart == '여수'
+    ||  tGoStart == '여수엑스포'
+    ||  tGoStart == '여수EXPO'  ) thisForm.txtGoStart1_1.value = '여수EXPO';
+
+    if (tGoEnd == '여수'
+    ||  tGoEnd == '여수엑스포'
+    ||  tGoEnd == '여수EXPO'  ) thisForm.txtGoEnd1_1.value = '여수EXPO';
+
+
+    if (thisForm.txtGoStart1_1.value == thisForm.txtGoEnd1_1.value) {
+        alert('왕편(가는열차) 출발역명과 도착역명이 같습니다.');
+        return false;
+    }
+
+    // 열차번호로 예약 시
+    if (thisForm.radTrainNo1_1[1].checked == true) {
+        if ((thisForm.txtTrainNo1_1.value == '') ||
+            (dw_IsNumeric(thisForm.txtTrainNo1_1.value) == false) ||
+            (thisForm.txtTrainNo1_1.value.length > 5)) {
+            alert('열차번호는 빈칸 혹은 숫자 5자리가 넘거나 문자가 포함될 수 없습니다.');
+            return false;
+        }
+        //checkSeatAttr(1);
+    }
+
+
+    // 기본좌석정보 저장
+    thisForm.hidGoRoom1_1.value = thisForm.selGoRoom1_1.value;
+
+    // 열차종별 및 차실 속성별 Check 수행
+    // 유아동반석 선택 시에는 새마을 열차만 지원됨
+    if (thisForm.selGoRoom1_1.value == '019') {
+        // 유아동반석은 직통여정만 제공함
+        if (thisForm.radJobId1[1].checked == true) {
+            alert('유아동반석은 직통여정 예약만 제공합니다.');
+            thisForm.selGoRoom1_1.focus();
+            return false;
+        }
+
+        if (thisForm.selGoTrain1_1.value != '01') {
+            if (confirm('유아동반석은 새마을호 일반실만 예약이 가능합니다. 예약하시겠습니까?')) {
+                thisForm.selGoTrain1_1.value = '01';
+                thisForm.hidGoRoom1_1.value  = '1';
+            } else {
+                thisForm.selGoRoom1_1.focus();
+                return false;
+            }
+        }
+    }
+
+    // 휠체어석 선택 시에는 KTX특실, 무궁화 일반실만 예약됨
+    if (thisForm.selGoRoom1_1.value == '021') {
+        if (thisForm.chkEnableCome.checked == true) {
+            if (thisForm.selGoRoom2_1.value != '021') {
+                alert('왕편(가는열차) 좌석이 휠체어석이면 복편좌석도 휠체어석이어야합니다.');
+                return false;
+            }
+        }
+
+        // 휠체어석은 직통여정만 제공함
+        if (thisForm.radJobId1[1].checked == true) {
+            alert('휠체어석은 직통여정 예약만 제공합니다.');
+            thisForm.selGoRoom1_1.focus();
+            return false;
+        }
+
+        if (thisForm.radTrainNo1_1[1].checked == false) {
+            if (thisForm.selGoTrain1_1.value == '00') {
+                if (!confirm('KTX 휠체어석은 특실로 예약됩니다. 예약하시겠습니까?')) {
+                    thisForm.selGoRoom1_1.focus();
+                    return false;
+                } else {
+                    thisForm.hidGoRoom1_1.value = '2';
+                }
+            } else
+            if (thisForm.selGoTrain1_1.value == '05'
+            ||  thisForm.selGoTrain1_1.value == '02'
+            ||  thisForm.selGoTrain1_1.value == '04'
+            ||  thisForm.selGoTrain1_1.value == '09') {
+                if (!confirm('ITX-청춘, 무궁화호, 누리로 휠체어석은 일반실로 예약됩니다. 예약하시겠습니까?')) {
+                    thisForm.selGoRoom1_1.focus();
+                    return false;
+                } else {
+                    thisForm.hidGoRoom1_1.value = '1';
+                }
+            } else {
+                alert('휠체어석은 KTX, ITX-청춘, 무궁화호, 누리로 열차에서 제공합니다. 열차종류를 변경하여 주십시오.');
+                thisForm.selGoTrain1_1.focus();
+                return false;
+            }
+        } else {
+            //열차번호이며 휠체어석을 체크했을때
+            var tempTrainNo1_1 = parseInt(thisForm.txtTrainNo1_1.value,10);
+            if (tempTrainNo1_1 > 999) {
+                //1000대이면 무궁화호 일반실로 배정
+                thisForm.hidGoRoom1_1.value = '1';
+            } else {
+                //3자리 숫자이며 KTX혹은 새마을호 특실로 배정
+                thisForm.hidGoRoom1_1.value = '2';
+            }
+        }
+    }
+
+    // 전동휠체어석 선택 시에는 KTX특실만 예약됨
+    if (thisForm.selGoRoom1_1.value == '028') {
+        if (thisForm.chkEnableCome.checked == true) {
+            if (thisForm.selGoRoom2_1.value != '028') {
+                alert('왕편(가는열차) 좌석이 전동휠체어석이면 복편좌석도 전동휠체어석이어야합니다.');
+                return false;
+            }
+        }
+
+        // 휠체어석은 직통여정만 제공함
+        if (thisForm.radJobId1[1].checked == true) {
+            alert('전동휠체어석은 직통여정 예약만 제공합니다.');
+            thisForm.selGoRoom1_1.focus();
+            return false;
+        }
+
+        if (thisForm.radTrainNo1_1[1].checked == false) {
+            if (thisForm.selGoTrain1_1.value == '00') {
+                if (!confirm('KTX 전동휠체어석은 특실로 예약됩니다. 예약하시겠습니까?')) {
+                    thisForm.selGoRoom1_1.focus();
+                    return false;
+                } else {
+                    thisForm.hidGoRoom1_1.value = '2';
+                }
+            } else
+            if (thisForm.selGoTrain1_1.value == '05'
+            ||  thisForm.selGoTrain1_1.value == '02'
+            ||  thisForm.selGoTrain1_1.value == '04'
+            ||  thisForm.selGoTrain1_1.value == '09') {
+                if (!confirm('ITX-청춘, 무궁화호, 누리로 전동휠체어석은 일반실로 예약됩니다. 예약하시겠습니까?')) {
+                    thisForm.selGoRoom1_1.focus();
+                    return false;
+                } else {
+                    thisForm.hidGoRoom1_1.value = '1';
+                }
+            } else {
+                alert('전동휠체어석은 KTX, ITX-청춘, 무궁화호, 누리로 열차에서 제공합니다. 열차종류를 변경하여 주십시오.');
+                thisForm.selGoTrain1_1.focus();
+                return false;
+            }
+        } else {
+            //열차번호이며 전동휠체어석을 체크했을때
+            var tempTrainNo1_1 = parseInt(thisForm.txtTrainNo1_1.value,10);
+            if (tempTrainNo1_1 > 999) {
+                //1000대이면 무궁화호 일반실로 배정
+                thisForm.hidGoRoom1_1.value = '1';
+            } else {
+                //3자리 숫자이며 KTX혹은 새마을호 특실로 배정
+                thisForm.hidGoRoom1_1.value = '2';
+            }
+        }
+    }
+
+    // 2층석
+    if (thisForm.selGoRoom1_1.value == '018') {
+        if (thisForm.chkEnableCome.checked == true) {
+            if (thisForm.selGoRoom2_1.value != '018') {
+                alert('왕편(가는열차) 좌석이 2층석이면 복편좌석도 2층석이어야합니다.');
+                thisForm.selGoRoom2_1.focus();
+                return false;
+            }
+        }
+
+        // 2층석은 직통여정만 제공함
+        if (thisForm.radJobId1[1].checked == true) {
+            alert('2층석은 직통여정 예약만 제공합니다.');
+            thisForm.selGoRoom1_1.focus();
+            return false;
+        }
+
+        thisForm.hidGoRoom1_1.value = '1';
+
+        if (thisForm.radTrainNo1_1[1].checked == false) {
+            if (thisForm.selGoTrain1_1.value != '05' &&
+                thisForm.selGoTrain1_1.value != '09' ) {
+                alert('2층석은 ITX-청춘 열차에서 제공합니다. 열차종류를 변경하여 주십시오.');
+                thisForm.selGoTrain1_1.focus();
+                return false;
+            }
+        }
+    }
+
+    // 4인동반석
+    if (thisForm.selGoRoom1_1.value == '027' || thisForm.selGoRoom1_1.value == '038') {
+        // 2층석은 직통여정만 제공함
+        if (thisForm.radJobId1[1].checked == true) {
+            alert('4인동반석은 직통여정 예약만 제공합니다.');
+            thisForm.selGoRoom1_1.focus();
+            return false;
+        }
+
+        thisForm.hidGoRoom1_1.value = '1';
+    }
+
+
+    // 복편 선택 시
+    if (thisForm.chkEnableCome.checked == true) {
+        thisForm.hidGoRoom2_1.value = thisForm.selGoRoom2_1.value;
+
+        //복편 출발역 공백을 제거한다.
+        thisForm.txtGoStart2_1.value = trim(thisForm.txtGoStart2_1.value);
+        if (thisForm.txtGoStart2_1.value == '') {
+            alert('복편(오는열차) 출발역을 입력하여 주십시오');
+            thisForm.txtGoStart2_1.focus();
+            return false;
+        }
+
+        //복편 도착역 공백을 제거한다.
+        thisForm.txtGoEnd2_1.value = trim(thisForm.txtGoEnd2_1.value);
+        if (thisForm.txtGoEnd2_1.value == '') {
+            alert('복편(오는열차) 도착역을 입력하여 주십시오');
+            thisForm.txtGoEnd2_1.focus();
+            return false;
+        }
+
+        if (thisForm.txtGoStart2_1.value == thisForm.txtGoEnd2_1.value ) {
+            alert('복편(오는열차) 출발역명과 도착역명이 같습니다.');
+            return false;
+        }
+
+
+        //여수expo 2011.12.16 ljy nhj
+        var tComeStart = thisForm.txtGoStart2_1.value.toUpperCase();
+        var tComeEnd   = thisForm.txtGoEnd2_1  .value.toUpperCase();
+
+        if (tComeStart == '여수'
+        ||  tComeStart == '여수엑스포'
+        ||  tComeStart == '여수EXPO'  ) thisForm.txtGoStart2_1.value = '여수EXPO';
+
+        if (tComeEnd == '여수'
+        ||  tComeEnd == '여수엑스포'
+        ||  tComeEnd == '여수EXPO'  ) thisForm.txtGoEnd2_1.value = '여수EXPO';
+
+
+        if (thisForm.radTrainNo2_1[1].checked == true) {
+            if ((thisForm.txtTrainNo2_1.value == '') ||
+                (dw_IsNumeric(thisForm.txtTrainNo2_1.value) == false) ||
+                (thisForm.txtTrainNo2_1.value.length > 5)) {
+                alert('열차번호는 빈칸 혹은 숫자 5자리가 넘거나 문자가 포함될 수 없습니다.');
+                return false;
+            }
+            //checkSeatAttr(2);
+        }
+
+        // 열차종별 및 차실 속성별 Check 수행
+        // 유아동반석 선택 시에는 새마을 열차만 지원됨
+        if (thisForm.selGoRoom2_1.value == '019') {
+            // 유아동반석은 직통여정만 제공함
+            if (thisForm.radJobId2[1].checked == true) {
+                alert('유아동반석은 직통여정 예약만 제공합니다.');
+                thisForm.selGoRoom2_1.focus();
+                return false;
+            }
+
+            if (thisForm.selGoTrain2_1.value != '01') {
+                if (confirm('유아동반석은 새마을호 일반실만 예약이 가능합니다. 예약하시겠습니까?')) {
+                    thisForm.selGoTrain2_1.value = '01';
+                    thisForm.hidGoRoom2_1.value  = '1';
+                } else {
+                    thisForm.selGoRoom2_1.focus();
+                    return false;
+                }
+            }
+        }
+
+        // 휠체어석 선택 시에는 KTX특실, 무궁화 일반실만 예약됨
+        if (thisForm.selGoRoom2_1.value == '021') {
+            if (thisForm.selGoRoom1_1.value != '021') {
+                 alert('복편(오는열차)좌석이 휠체어석이면 왕편좌석도 휠체어석이어야합니다.');
+                 return false;
+            }
+
+            // 휠체어석은 직통여정만 제공함
+            if (thisForm.radJobId2[1].checked == true) {
+                alert('휠체어석은 직통여정 예약만 제공합니다.');
+                thisForm.selGoRoom1_1.focus();
+                return false;
+            }
+
+            if (thisForm.radTrainNo2_1[1].checked == false) {
+                if (thisForm.selGoTrain2_1.value == '00') {
+                    if (!confirm('KTX 휠체어석은 특실로 예약됩니다. 예약하시겠습니까?')) {
+                        thisForm.selGoRoom2_1.focus();
+                        return false;
+                    } else {
+                        thisForm.hidGoRoom2_1.value = '2';
+                    }
+                } else
+                if (thisForm.selGoTrain2_1.value == '05'
+                ||  thisForm.selGoTrain2_1.value == '02'
+                ||  thisForm.selGoTrain2_1.value == '04'
+                ||  thisForm.selGoTrain2_1.value == '09') {
+                    if (!confirm('ITX-청춘, 무궁화호, 누리로 휠체어석은 일반실로 예약됩니다. 예약하시겠습니까?')) {
+                        thisForm.selGoRoom2_1.focus();
+                        return false;
+                    } else {
+                        thisForm.hidGoRoom2_1.value = '1';
+                    }
+                } else {
+                    alert('복편(오는열차)에서 휠체어석은 KTX , ITX-청춘, 무궁화호, 누리로 열차에서 제공합니다. 열차종류를 변경하여 주십시오.');
+                    thisForm.selGoTrain2_1.focus();
+                    return false;
+                }
+
+            } else {
+                //열차번호이며 휠체어석을 체크했을때
+                var tempTrainNo2_1 = parseInt(thisForm.txtTrainNo2_1.value,10);
+                if (tempTrainNo2_1 > 999) {
+                    //1000대이면 무궁화호 일반실로 배정
+                    thisForm.hidGoRoom2_1.value = '1';
+                } else {
+                    //3자리 숫자이며 KTX혹은 새마을호 특실로 배정
+                    thisForm.hidGoRoom2_1.value = '2';
+                }
+            }
+        }
+
+        // 전동휠체어석 선택 시에는 KTX특실만 예약됨
+        if (thisForm.selGoRoom2_1.value == '028') {
+            if (thisForm.selGoRoom1_1.value != '028') {
+                 alert('복편(오는열차)좌석이 전동휠체어석이면 왕편좌석도 전동휠체어석이어야합니다.');
+                 return false;
+            }
+
+            // 직통여정만 제공함
+            if (thisForm.radJobId2[1].checked == true) {
+                alert('전동휠체어석은 직통여정 예약만 제공합니다.');
+                thisForm.selGoRoom1_1.focus();
+                return false;
+            }
+
+            if (thisForm.radTrainNo2_1[1].checked == false) {
+                if (thisForm.selGoTrain2_1.value == '00') {
+                    if (!confirm('KTX 전동휠체어석은 특실로 예약됩니다. 예약하시겠습니까?')) {
+                        thisForm.selGoRoom2_1.focus();
+                        return false;
+                    } else {
+                        thisForm.hidGoRoom2_1.value = '2';
+                    }
+                } else
+                if (thisForm.selGoTrain2_1.value == '05'
+                ||  thisForm.selGoTrain2_1.value == '02'
+                ||  thisForm.selGoTrain2_1.value == '04'
+                ||  thisForm.selGoTrain2_1.value == '09') {
+                    if (!confirm('ITX-청춘, 무궁화호, 누리로 전동휠체어석은 일반실로 예약됩니다. 예약하시겠습니까?')) {
+                        thisForm.selGoRoom2_1.focus();
+                        return false;
+                    } else {
+                        thisForm.hidGoRoom2_1.value = '1';
+                    }
+                } else {
+                    alert('복편(오는열차)에서 전동휠체어석은 KTX, ITX-청춘, 무궁화호, 누리로 열차에서 제공합니다. 열차종류를 변경하여 주십시오.');
+                    thisForm.selGoTrain2_1.focus();
+                    return false;
+                }
+
+            } else {
+                //열차번호이며 휠체어석을 체크했을때
+                var tempTrainNo2_1 = parseInt(thisForm.txtTrainNo2_1.value,10);
+                if (tempTrainNo2_1 > 999) {
+                    //1000대이면 무궁화호 일반실로 배정
+                    thisForm.hidGoRoom2_1.value = '1';
+                } else {
+                    //3자리 숫자이며 KTX혹은 새마을호 특실로 배정
+                    thisForm.hidGoRoom2_1.value = '2';
+                }
+            }
+        }
+
+        // 2층석 선택 시에는 ITX-청춘만 예약됨
+        if (thisForm.selGoRoom2_1.value == '018') {
+            if (thisForm.selGoRoom1_1.value != '018') {
+                alert('복편(오는열차)좌석이 2층석이면 왕편좌석도 2층석이어야합니다.');
+                thisForm.selGoRoom1_1.focus();
+                return false;
+            }
+
+            // 2층석은 직통여정만 제공함
+            if (thisForm.radJobId2[1].checked == true) {
+                alert('2층석은 직통여정 예약만 제공합니다.');
+                thisForm.selGoRoom2_1.focus();
+                return false;
+            }
+
+            thisForm.hidGoRoom2_1.value = '1';
+
+            if (thisForm.radTrainNo2_1[1].checked == false) {
+                if (thisForm.selGoTrain2_1.value != '05' &&
+                    thisForm.selGoTrain2_1.value != '09' ) {
+                    alert('복편(오는열차)에서 2층석은 ITX-청춘 열차에서 제공합니다. 열차종류를 변경하여 주십시오.');
+                    thisForm.selGoTrain2_1.focus();
+                    return false;
+                }
+            }
+        }
+
+        //특실선택시 무궁화호이면 좌석이 없음 표시
+        if (thisForm.radTrainNo2_1[1].checked == false) {
+            if (thisForm.selGoRoom2_1.value == '2') {
+                if (thisForm.selGoTrain2_1.value == '02') {
+                    alert('무궁화호에서는 특실이 지원되지 않습니다.');
+                    thisForm.selGoRoom2_1.focus();
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+/*----------------------------------------------------------------------------*/
+/* 역선택                                                                     */
+/*----------------------------------------------------------------------------*/
+function btnPopWin(name) {
+    var xwidth = 520;
+    var yheight = 400;
+    var left = (screen.width-xwidth)/2;
+    var top = (screen.height-yheight)/2;
+    var pop  = window.open('','popWin1_1','left='+left+',top='+top+',width='+xwidth+',height='+yheight+',scrollbars=yes');
+    pop.location = '/classes/bt/pr11100/sw_pr11111_f1Svt.do?hidOpener=' + name;
+}
+
+/*----------------------------------------------------------------------------*/
+/* 복편 선택 시 입력 부분 On, Off                                             */
+/*----------------------------------------------------------------------------*/
+function enableComeTrain() {
+    var thisForm = document.form1;
+
+    // 복편 선택
+    if (thisForm.chkEnableCome.checked == true) {
+        thisForm.radJobId2[0].disabled   = false;
+        thisForm.radJobId2[1].disabled   = false;
+        thisForm.txtGoStart2_1.disabled    = false;
+        thisForm.txtGoEnd2_1.disabled      = false;
+        thisForm.selGoRoom2_1.disabled     = false;
+        thisForm.radTrainNo2_1[0].disabled = false;
+        thisForm.radTrainNo2_1[1].disabled = false;
+        thisForm.selGoMMDD2_1.disabled     = false;
+        thisForm.txtGoYoil2_1.disabled     = false;
+        $('#searchDptStn2').attr('disabled', false);
+        $('#searchArvStn2').attr('disabled', false);
+
+        if (thisForm.radTrainNo2_1[0].checked == true) {
+            thisForm.selGoHour2_1.disabled    = false;
+            thisForm.selGoMinute2_1.disabled  = false;
+            thisForm.selGoTrain2_1.disabled   = false;
+            thisForm.txtTrainNo2_1.disabled   = true;
+        }
+        if (thisForm.radTrainNo2_1[1].checked == true) {
+            thisForm.selGoHour2_1.disabled    = true;
+            thisForm.selGoMinute2_1.disabled  = true;
+            thisForm.selGoTrain2_1.disabled   = true;
+            thisForm.txtTrainNo2_1.disabled   = false;
+        }
+
+        //왕편의 출발역을 복편의 도착역으로 왕편의 도착역을 복편의 출발역으로 값을 넣음
+        if (thisForm.txtGoStart1_1.value != null) {
+            //왕편의 출발역을 복편의 도착역으로
+            thisForm.txtGoEnd2_1.value = thisForm.txtGoStart1_1.value ;
+        }
+        if (thisForm.txtGoEnd1_1.value != null) {
+            //왕편의 도착역을 복편의 출발역으로
+            thisForm.txtGoStart2_1.value = thisForm.txtGoEnd1_1.value;
+        }
+
+        checkSeatAttr(2);
+
+    } else {
+        thisForm.radJobId2[0].disabled   = true;
+        thisForm.radJobId2[1].disabled   = true;
+        thisForm.txtGoStart2_1.disabled    = true;
+        thisForm.txtGoEnd2_1.disabled      = true;
+        thisForm.selGoRoom2_1.disabled     = true;
+        thisForm.radTrainNo2_1[0].disabled = true;
+        thisForm.radTrainNo2_1[1].disabled = true;
+        thisForm.selGoMMDD2_1.disabled     = true;
+        thisForm.txtGoYoil2_1.disabled     = true;
+        $('#searchDptStn2').attr('disabled', true);
+        $('#searchArvStn2').attr('disabled', true);
+
+        thisForm.selGoHour2_1.disabled     = true;
+        thisForm.selGoMinute2_1.disabled   = true;
+        thisForm.selGoTrain2_1.disabled    = true;
+        thisForm.txtTrainNo2_1.disabled    = true;
+    }
+    checkMaxPassenger(1);
+}
+
+/*----------------------------------------------------------------------------*/
+/* 직통, 환승 선택시  열차번호 Disable시킴                                    */
+/*----------------------------------------------------------------------------*/
+function enableRadJob() {
+    // 환승일 경우
+    var thisForm = document.form1;
+    // 왕편 환승
+    if (thisForm.radJobId1[1].checked  == true) {
+        if (thisForm.radTrainNo1_1[1].checked == true) {
+            alert('왕편(가는열차) 환승선택시 열차시각으로 예약을 해야합니다.');
+            thisForm.radTrainNo1_1[1].checked = false;
+            thisForm.radTrainNo1_1[0].checked = true;
+            enableTrainNo();
+        }
+    }
+
+    // 복편 환승
+    if (thisForm.chkEnableCome.checked == true) {
+        if (thisForm.radJobId2[1].checked  == true) {
+            if (thisForm.radTrainNo2_1[1].checked == true) {
+                alert('복편(오는열차) 환승선택시 열차시각으로 예약을해야합니다.');
+                thisForm.radTrainNo2_1[1].checked = false;
+                thisForm.radTrainNo2_1[0].checked = true;
+                enableTrainNo2();
+            }
+        }
+    }
+}
+
+/*----------------------------------------------------------------------------*/
+/* 열차번호 입력 선택 시                                                      */
+/*----------------------------------------------------------------------------*/
+function enableTrainNo() {
+    var thisForm = document.form1;
+
+    thisForm.selGoTrain1_1.value = '05'; // 열차번호선택시 차종은 전체로. 2017.08.23 ljy 송대헌
+
+    // 열차번호 선택이 Check된상태이면 출발시간과 열차를 Disable한다.
+    // 왕편열차번호가 체크됨
+    if (thisForm.radTrainNo1_1[1].checked == true) {
+        if (thisForm.radJobId1[1].checked  == true) {
+            alert('왕편(가는열차) 환승선택시 열차시각으로 예약을 해야합니다.');
+            thisForm.radTrainNo1_1[1].checked = false;
+            thisForm.radTrainNo1_1[0].checked = true;
+            enableTrainNo();
+        } else {
+            // 출발시간과 열차 Disable
+            thisForm.selGoHour1_1.disabled    = true;
+            thisForm.selGoTrain1_1.disabled   = true;
+            thisForm.selGoMinute1_1.disabled  = true;
+            thisForm.txtTrainNo1_1.disabled   = false;
+        }
+
+    } else if(thisForm.radTrainNo1_1[0].checked == true) {
+        // 왕편출발시각이 체크됨
+        // 출발시간과 열차 Disable
+        thisForm.selGoHour1_1.disabled    = false;
+        thisForm.selGoTrain1_1.disabled  = false;
+        thisForm.selGoMinute1_1.disabled   = false;
+        thisForm.txtTrainNo1_1.disabled   = true;
+    }
+}
+
+function enableTrainNo2() {
+    var thisForm = document.form1;
+
+    thisForm.selGoTrain2_1.value = '05'; // 열차번호선택시 차종은 전체로. 2017.08.23 ljy 송대헌
+
+    if (thisForm.radTrainNo2_1[1].checked == true) {
+        //복편열차번호가 체크됨
+        if (thisForm.chkEnableCome.checked == true) {
+            if (thisForm.radJobId2[1].checked == true) {
+                alert('복편(오는열차) 환승선택시 열차시각으로 예약을해야합니다.');
+                thisForm.radTrainNo2_1[1].checked = false;
+                thisForm.radTrainNo2_1[0].checked = true;
+                enableTrainNo2();
+            } else {
+                thisForm.selGoHour2_1.disabled    = true;
+                thisForm.selGoMinute2_1.disabled  = true;
+                thisForm.selGoTrain2_1.disabled   = true;
+                thisForm.txtTrainNo2_1.disabled   = false;
+            }
+        }
+
+    } else if(thisForm.radTrainNo2_1[0].checked == true) {
+        //복편출발시각이 체크됨
+        if (thisForm.chkEnableCome.checked == true) {
+            thisForm.selGoHour2_1.disabled    = false;
+            thisForm.selGoMinute2_1.disabled  = false;
+            thisForm.selGoTrain2_1.disabled   = false;
+            thisForm.txtTrainNo2_1.disabled   = true;
+        }
+    }
+}
+
+/*----------------------------------------------------------------------------*/
+/* 차실 선택 시                                                               */
+/*----------------------------------------------------------------------------*/
+function checkSeatAttr(dv) {
+    var thisForm = document.form1;
+
+    // 4인동반석
+    if (thisForm.selGoRoom1_1.value == '027' || thisForm.selGoRoom1_1.value == '038') {
+        document.getElementById('dPsInfo' ).style.display = 'none';
+        document.getElementById('dPsInfo2').style.display = 'block';
+        document.getElementById('chkEnableCome').checked = false;
+        document.getElementById('chkEnableCome').disabled = true;
+        thisForm.selGoRoom2_1.selectedIndex = 0;
+        enableComeTrain();
+    } else {
+        document.getElementById('dPsInfo' ).style.display = 'block';
+        document.getElementById('dPsInfo2').style.display = 'none';
+        document.getElementById('chkEnableCome').disabled = false;
+    }
+
+    //kLog('checkSeatAttr:thisForm.chkEnableCome='+thisForm.chkEnableCome);
+
+    if (thisForm.chkEnableCome.checked == true) {
+        if (thisForm.selGoRoom1_1.value != thisForm.selGoRoom2_1.value) {
+            if (thisForm.selGoRoom1_1.value == '021') {
+                alert('휠체어석을 이용하시려면 왕편과 복편 모두 휠체어석으로 선택하여 주십시오.');
+            }
+
+            if (thisForm.selGoRoom1_1.value == '028') {
+                alert('전동휠체어석을 이용하시려면 왕편과 복편 모두 전동휠체어석으로 선택하여 주십시오.');
+            }
+
+            if (thisForm.selGoRoom1_1.value == '018') {
+                alert('2층석을 이용하시려면 왕편과 복편 모두 2층석으로 선택하여 주십시오.');
+            }
+        }
+    }
+}
+
+/*----------------------------------------------------------------------------*/
+/* 날자 조절용 프로그램                                                       */
+/*----------------------------------------------------------------------------*/
+monName = new Array(12);
+monName[0]='January ';
+monName[1]='February ';
+monName[2]='March ';
+monName[3]='April ';
+monName[4]='May ';
+monName[5]='June ';
+monName[6]='July ';
+monName[7]='August ';
+monName[8]='September ';
+monName[9]='October ';
+monName[10]='November ';
+monName[11]='December ';
+objects=new Array(8);
+objects[0]='일';
+objects[1]='월';
+objects[2]='화';
+objects[3]='수';
+objects[4]='목';
+objects[5]='금';
+objects[6]='토';
+objects[7]='  ';
+
+/*----------------------------------------------------------------------------*/
+/* 요일 setting */
+/*----------------------------------------------------------------------------*/
+function isValidDateSetting(objYear, objMMDD, objHour, objYoil) {
+    if (objMMDD.length < 4) return;
+
+    //objHour.options[0].selected = true; 시간초기화 삭제. 2017.08.23 ljy 송대헌부장
+
+    ////////////////////////////////////////////////////////////////////////////
+    //계산되어진 결과를 가지고 월과 요일을 설정 정확한 요일이 나오게 한다. 2004.08.08 김진호 수정
+    var x = objYear.value;
+    var y = objMMDD.value.substring(0,2);
+    var z = objMMDD.value.substring(2,4);
+
+    ////////////////////////////////////////////////////////////////////////////
+    if (y=='01') anydays = new Date(monName[0]+z+','+x);
+    if (y=='02') anydays = new Date(monName[1]+z+','+x);
+    if (y=='03') anydays = new Date(monName[2]+z+','+x);
+    if (y=='04') anydays = new Date(monName[3]+z+','+x);
+    if (y=='05') anydays = new Date(monName[4]+z+','+x);
+    if (y=='06') anydays = new Date(monName[5]+z+','+x);
+    if (y=='07') anydays = new Date(monName[6]+z+','+x);
+    if (y=='08') anydays = new Date(monName[7]+z+','+x);
+    if (y=='09') anydays = new Date(monName[8]+z+','+x);
+    if (y=='10') anydays = new Date(monName[9]+z+','+x);
+    if (y=='11') anydays = new Date(monName[10]+z+','+x);
+    if (y=='12') anydays = new Date(monName[11]+z+','+x);
+    var dw = anydays.getDay();
+
+    objYoil.value=objects[dw];
+    ////////////////////////////////////////////////////////////////////////////
+    return;
+}
+
+
+function infochk() {
+    /*
+    if (bClickComplete == true) {
+        alert('이미 예약을 요청하신 사항입니다. 잠시만 기다려주십시오.');
+        return;
+    }
+    */
+
+    // 승차인원정보 검사
+    if (checkCompaCnt() == false) return false;
+
+    // 열차정보 확인
+    if (checkTrainInfo() == false) return false;
+
+    var thisForm = document.form1;
+    with (thisForm) {
+        // 예약인원 Setting
+        if (thisForm.selGoRoom1_1.value == '027' || thisForm.selGoRoom1_1.value == '038') {
+            txtCompaCnt1.value = parseInt(txtSetFlg_1.value,10);
+            txtCompaCnt2.value = 0;
+            txtCompaCnt3.value = 0;
+        //  txtCompaCnt4.value = 0;
+            txtCompaCnt5.value = 0;
+        //  txtCompaCnt6.value = 0;
+            txtCompaCnt7.value = 0;
+        } else {
+            txtCompaCnt1.value = parseInt(txtPsgFlg_1.value,10);
+            txtCompaCnt2.value = parseInt(txtPsgFlg_2.value,10);
+            txtCompaCnt3.value = parseInt(txtPsgFlg_3.value,10);
+        //  txtCompaCnt4.value = parseInt(txtPsgFlg_4.value,10);
+            txtCompaCnt5.value = parseInt(txtPsgFlg_5.value,10);
+        //  txtCompaCnt6.value = parseInt(txtPsgFlg_6.value,10);
+            txtCompaCnt7.value = parseInt(txtPsgFlg_7.value,10);
+        }
+
+
+        // 좌석정보 Setting
+        // 유아동반석:19, 휠체어석:21, 전동훨체어석:28, 2층석:18, 동반석:27
+        if (selGoRoom1_1.value == '018'
+        ||  selGoRoom1_1.value == '019'
+        ||  selGoRoom1_1.value == '021'
+        ||  selGoRoom1_1.value == '028'
+        ||  selGoRoom1_1.value == '027'
+        ||  selGoRoom1_1.value == '038') {
+            txtSeatAttCd4.value = selGoRoom1_1.value;
+        }
+
+
+        // 복편이 있을 경우 환승처리
+        if (chkEnableCome.checked == true) {
+            if (selGoRoom2_1.value == '018'
+            ||  selGoRoom2_1.value == '019'
+            ||  selGoRoom2_1.value == '021'
+            ||  selGoRoom2_1.value == '028'
+            ||  selGoRoom2_1.value == '027'
+            ||  selGoRoom2_1.value == '038') {
+                txtSeatAttCd4.value = selGoRoom2_1.value;
+            }
+
+            if (txtGoStart1_1.value == txtGoStart2_1.value &&
+                txtGoEnd1_1.value == txtGoEnd2_1.value ) {
+                alert('왕편구간과 복편구간이 동일합니다.');
+                return;
+            }
+        }
+
+
+        // 여정수 지정
+        var intJrnyCnt = 1; // 기본 값 1
+        txtJrnyCnt.value = '';
+
+        // 환승일 경우
+        if (radJobId1[1].checked == true)
+            intJrnyCnt += 1;
+
+        txtComeFlag.value = 'false';
+
+        // 복편이 있을 경우 와 환승여정처리
+        if (chkEnableCome.checked == true) {
+            intJrnyCnt += 1;
+            txtComeFlag.value = 'true';           // 복편 있음을 알림
+
+            // 복편환승이 있을 경우
+            if (radJobId2[1].checked == true) {
+                intJrnyCnt += 1;
+            }
+        }
+
+        txtJrnyCnt.value = intJrnyCnt;
+
+
+        // 출발도착날짜 셋팅
+        txtDptDt1_1.value = selGoYear.value + selGoMMDD1_1.value;
+        txtDptDt2_1.value = selGoYear.value + selGoMMDD2_1.value;
+
+        //출발시간 셋팅
+        txtDptTm1_1.value = selGoHour1_1.value + selGoMinute1_1.value + '00';
+        txtDptTm2_1.value = selGoHour2_1.value + selGoMinute2_1.value + '00';
+
+
+        //복편 체크가되어있을경우.
+        if (chkEnableCome.checked == true) {
+            if (txtDptDt1_1.value > txtDptDt2_1.value) {
+                alert('복편(오는열차)의 예약일이 왕편(가는열차)의 예약일보다 빠릅니다. 다시 확인하여 주십시오');
+                selGoMMDD2_1.focus();
+                return false;
+            }
+        }
+
+
+        if (radTrainNo1_1[0].checked == true && selGoHour1_1.value == '') {
+            alert('왕편시각을 선택하여 주십시오.');
+            selGoHour1_1.focus();
+            return;
+        }
+        if (chkEnableCome.checked == true && radTrainNo2_1[0].checked == true && selGoHour2_1.value == '') {
+            alert('복편시각을 선택하여 주십시오.');
+            selGoHour2_1.focus();
+            return;
+        }
+
+
+        // 열차번호로 조회 시
+        // 왕편열차 열차번호
+        if (radTrainNo1_1[1].checked == true) {
+            txtTrnNoFlag1_1.value = 'true';
+            txtTrainNo1_1.value = corectionTrainInfo(txtTrainNo1_1.value);
+        } else {
+            txtTrnNoFlag1_1.value = 'false';
+            txtTrainNo1_1.value = '';
+        }
+
+        // 복편이 있을 경우 환승처리
+        if (chkEnableCome.checked == true) {
+            // 복편열차 열차번호
+            if (radTrainNo2_1[1].checked == true) {
+                txtTrnNoFlag2_1.value = 'true';
+                txtTrainNo2_1.value = corectionTrainInfo(txtTrainNo2_1.value);
+            } else {
+                txtTrnNoFlag2_1.value = 'false';
+                txtTrainNo2_1.value = '';
+            }
+        }
+
+
+        // 왕편과 복편의 예약 시간 비교
+        var strGoDate   = txtDptDt1_1.value + txtDptTm1_1.value;
+        var strComeDate = txtDptDt2_1.value + txtDptTm2_1.value;
+
+
+        //복편 체크가되어있을경우.
+        if (chkEnableCome.checked == true && radTrainNo1_1[0].checked == true && radTrainNo2_1[0].checked == true) {
+            if (strGoDate >= strComeDate) {
+                alert('복편(오는열차)의 예약시간이 왕편(가는열차)의 예약시간보다 빠릅니다. 다시 확인하여 주십시오');
+                selGoMMDD2_1.focus();
+                return false;
+            }
+        }
+
+        hidGoTrain1_1 .value = selGoTrain1_1.value;
+        hidGoTrain2_1 .value = selGoTrain2_1.value;
+    }
+
+    return true;
+}
+
+function reserve2() {
+    var thisForm = document.form1;
+    thisForm.method = 'post';
+    thisForm.action = '/classes/bt/pr12100/sw_pr12111_i1Svt.do';
+    thisForm.submit();
+
+    //예약요청을 한번 했다는 표시를 함
+    //bClickComplete = true;
+
+    with (thisForm) {
+        // 예약수행전에 이전정보에 대한 잔상이남아있어 이를 지우기로함 김진호 : 04/07/28
+        txtSeatAttCd1  .value = '000';    // 좌석유형, 고정
+        txtSeatAttCd2  .value = '000';    // 좌석유형, 고정
+        txtSeatAttCd3  .value = '000';    // 좌석유형, 고정
+        txtSeatAttCd4  .value = '015';    // 좌석유형, 고정
+        txtSeatAttCd5  .value = '000';    // 좌석유형, 고정
+
+        hidGoRoom1_1   .value = '';      // 왕편좌석속성을 초기화시킴
+        hidGoRoom2_1   .value = '';      // 복편좌석속성을 초기화시킴
+        txtJrnyCnt     .value = '';      // 여정수를 초기화시킴
+        txtTrnNoFlag1_1.value = 'false'; // 열차번호로 왕편 예약여부 플래그, 시간예약:'false', 열차예약:'true'
+        txtTrnNoFlag2_1.value = 'false'; // 열차번호로 복편 예약여부 플래그, 시간예약:'false', 열차예약:'true'
+    }
+}
+
+var popEventOccur = function() {};
+
+var kLog = function() {};
+$(document).ready(function() {
+    // check frame
+    if (typeof(parent.control) == 'undefined') {
+        parent.location.href = '/korail/ebizbt/w_main.do';
+        return;
+    }
+
+    var k = new KORAIL('11110');
+    kLog = function() {
+        if (k.isDebug === "Y" && typeof console != 'undefined' && typeof console.log == 'function') {
+            console.log.apply(console, arguments);
+        }
+    };
+    //k.checkTime();
+    k.monitorEvent();
+    try{parent.control.viewAll();}catch(e) {}
+
+    popEventOccur = function() {
+        k.eventOccur();
+    };
+
+    $('a[name=btn]').on('click keyup', function(e) {
+        if (e.type == 'keyup' && e.keyCode != 13 && e.keyCode != 32) return;
+
+        parent.control.callService($(this).attr('id'));
+        e.preventDefault();
+    });
+
+    $('#btnReserve').click(function(e) {
+        reserve();
+        e.preventDefault();
+    });
+
+    /*----------------------------------------------------------------------------*/
+    /* 예약 요청                                                                  */
+    /*----------------------------------------------------------------------------*/
+    var reserve = function() {
+        if (infochk() != true) return;
+
+        if (parent.control.checkCallCount() == 'stop') return;
+        parent.control.addCallCount();
+
+
+        // 대기자 체크 2013.08.27 ljy
+        var strPopName = 'popReserve';
+        var xwidth = 852;
+        var yheight = 740;
+        var left = (screen.width-xwidth)/2;
+        var top = (screen.height-yheight)/2;
+        var win_style = 'left='+left+',top='+top+',toolbar=no, location=no, directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width='+xwidth+',height='+yheight;
+        var popwin = window.open('', strPopName, win_style);
+        popwin.focus();
+
+        document.form1.target = strPopName;
+        reserve2();
+
+        //parent.control.checkServerState();
+    };
+});
+
+window.onload = function() {
+    // 왕복 셋팅
+    var frm = document.form1;
+
+    isValidDateSetting(frm.selGoYear, frm.selGoMMDD1_1, frm.selGoHour1_1, frm.txtGoYoil1_1);
+    isValidDateSetting(frm.selGoYear, frm.selGoMMDD2_1, frm.selGoHour2_1, frm.txtGoYoil2_1);
+
+    frm.selGoRoom1_1.selectedIndex = 0;
+    frm.selGoRoom2_1.selectedIndex = 0;
+
+    document.getElementById('chkEnableCome').checked = false;
+    document.getElementById('chkEnableCome').disabled = false;
+    enableComeTrain();
+
+    $('#btnSave').click(save1);
+    //$('#btnLoad').click(load1);
+    //$('#btnClear').click(clear1);
+
+    load1(); // 기본여정정보 불러오기 (자동). 2017.08.23 ljy
+
+    // 자동완성
+    fn_atc_start();
+};
+</script>
+</html>
