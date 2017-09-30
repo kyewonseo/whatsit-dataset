@@ -7,12 +7,16 @@ import re
 from xml.etree.ElementTree import Element, ElementTree
 
 DEEPFASHION_DIR = '/dataset/img'
-DATASET_DIR = '/tmp/deepfashion'
+ROOT_DIR = '/tmp/deepfashion'
+DATASET_DIR = os.path.join(ROOT_DIR, 'dataset')
+DATA_DIR = os.path.join(ROOT_DIR, 'data')
+MODELS_DIR = os.path.join(ROOT_DIR, 'models')
 
 BBOX_FILE = './list_bbox.txt'
 CATEGORY_CLOTH_FILE = './list_category_cloth.txt'
 CATEGORY_IMG_FILE = './list_category_img.txt'
 EVAL_PARTITION_FILE = './list_eval_partition.txt'
+LABEL_MAP_FILE = 'label_map.pbtxt'
 
 
 def generate_annotation():
@@ -140,10 +144,18 @@ def download_image(filename, url):
     print(eu.reason)
 
 def make_directories():
+  if os.path.exists(DATA_DIR):
+    shutil.rmtree(DATA_DIR)
+
+  if os.path.exists(MODELS_DIR):
+    shutil.rmtree(MODELS_DIR)
+
   if os.path.exists(DATASET_DIR):
     shutil.rmtree(DATASET_DIR)
 
   os.makedirs(DATASET_DIR)
+  os.makedirs(DATA_DIR)
+  os.makedirs(MODELS_DIR)
 
   for path in ['Annotations','ImageSets', 'JPEGImages']:
     os.makedirs(DATASET_DIR + '/' + path)
@@ -171,6 +183,20 @@ def generate_imageset():
   f_val.close()
   f_test.close()
 
+def generate_labelmap():
+  f_category = open(CATEGORY_CLOTH_FILE, 'r')
+  lines = f_category.readlines()
+
+  f_label_map = open(os.path.join(DATA_DIR, 'label_map.pbtxt'), 'w')
+  for idx, val in enumerate(lines):
+    idx = idx + 1
+    f_label_map.write('item {\n')
+    f_label_map.write('  id: ' + str(idx) + '\n')
+    f_label_map.write('  name: ' + '\'' + re.sub('\\n$', '', val.strip()) + '\'\n')
+    f_label_map.write('}\n')
+  f_category.close()
+  f_label_map.close()
+
 def read_bbox():
   print(read_bbox)
 
@@ -180,7 +206,8 @@ def copy_images():
 
 
 if __name__ == '__main__':
-  make_directories()
-  copy_images()
-  generate_annotation()
-  generate_imageset()
+  # make_directories()
+  # copy_images()
+  # generate_annotation()
+  # generate_imageset()
+  generate_labelmap()
