@@ -25,7 +25,7 @@ def generate_annotation():
   category_lines = f_category.readlines()
   categories = []
   for category in category_lines:
-    categories.append(category)
+    categories.append(re.sub('\\n$', '', category))
   f_category.close()
 
   f_category_img_map = open(CATEGORY_IMG_FILE, 'r')
@@ -49,7 +49,7 @@ def generate_annotation():
 
     annotation = Element("annotation")
     folder = Element("folder")
-    folder.text = 'StyleLens'
+    folder.text = 'dataset'
     filename = Element("filename")
     filename.text = img
     source = Element("source")
@@ -206,8 +206,8 @@ def copy_images():
 
 
 if __name__ == '__main__':
-  # make_directories()
-  # copy_images()
-  # generate_annotation()
-  # generate_imageset()
+  make_directories()
+  copy_images()
+  generate_annotation()
+  generate_imageset()
   generate_labelmap()
