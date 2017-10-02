@@ -13,20 +13,28 @@ DATA_DIR = os.path.join(ROOT_DIR, 'data')
 MODELS_DIR = os.path.join(ROOT_DIR, 'models')
 
 BBOX_FILE = './list_bbox.txt'
-CATEGORY_CLOTH_FILE = './list_category_cloth.txt'
+# CATEGORY_CLOTH_FILE = './list_category_cloth.txt'
+CATEGORY_CLOTH_FILE = './list_class.txt'
 CATEGORY_IMG_FILE = './list_category_img.txt'
 EVAL_PARTITION_FILE = './list_eval_partition.txt'
 LABEL_MAP_FILE = 'label_map.pbtxt'
 
 
 def generate_annotation():
-
   f_category = open(CATEGORY_CLOTH_FILE, 'r')
   category_lines = f_category.readlines()
-  categories = []
+  category_dic = {}
   for category in category_lines:
-    categories.append(re.sub('\\n$', '', category))
+    c_map = re.sub('\\n$', '', category).strip().split()
+    category_dic[c_map[0]] = c_map[1]
   f_category.close()
+
+  # f_category = open(CATEGORY_CLOTH_FILE, 'r')
+  # category_lines = f_category.readlines()
+  # categories = []
+  # for category in category_lines:
+  #   categories.append(re.sub('\\n$', '', category).strip().split()[0])
+  # f_category.close()
 
   f_category_img_map = open(CATEGORY_IMG_FILE, 'r')
   category_img_lines = f_category_img_map.readlines()
@@ -39,7 +47,6 @@ def generate_annotation():
   f = open(BBOX_FILE, 'r')
   lines = f.readlines()
   for line in lines:
-    print(line)
     colum = line.strip().split()
     img = colum[0]
     x_1 = colum[1]
@@ -89,7 +96,7 @@ def generate_annotation():
 
     object = Element("object")
     name = Element("name")
-    name.text = categories[int(category_img_dic[img])]
+    name.text = category_dic[category_img_dic[img]]
     pose = Element("pose")
     pose.text = 'Frontal'
     truncated = Element("truncated")
@@ -164,6 +171,22 @@ def make_directories():
 
 def generate_imageset():
 
+  f_category = open(CATEGORY_CLOTH_FILE, 'r')
+  category_lines = f_category.readlines()
+  category_dic = {}
+  for category in category_lines:
+    c_map = re.sub('\\n$', '', category).strip().split()
+    category_dic[c_map[0]] = c_map[3]
+  f_category.close()
+
+  f_category_img_map = open(CATEGORY_IMG_FILE, 'r')
+  category_img_lines = f_category_img_map.readlines()
+  category_img_dic = {}
+  for pair in category_img_lines:
+    map = pair.strip().split()
+    category_img_dic[map[0]] = map[1]
+  f_category_img_map.close()
+
   f = open(EVAL_PARTITION_FILE, 'r')
   lines = f.readlines()
 
@@ -172,12 +195,14 @@ def generate_imageset():
   f_test = open(os.path.join(DATASET_DIR, 'ImageSets', 'Main', 'test.txt'), 'w')
   for line in lines:
     partition = line.strip().split()
-    if partition[1] == 'train':
-      f_train.write(line.strip().split()[0] + '\n')
-    elif partition[1] == 'val':
-      f_val.write(line.strip().split()[0] + '\n')
-    elif partition[1] == 'test':
-      f_test.write(line.strip().split()[0] + '\n')
+
+    if int(category_dic[category_img_dic[partition[0]]]) == 1:
+      if partition[1] == 'train':
+        f_train.write(line.strip().split()[0] + '\n')
+      elif partition[1] == 'val':
+        f_val.write(line.strip().split()[0] + '\n')
+      elif partition[1] == 'test':
+        f_test.write(line.strip().split()[0] + '\n')
   f.close()
   f_train.close()
   f_val.close()
