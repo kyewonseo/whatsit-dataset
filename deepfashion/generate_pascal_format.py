@@ -209,15 +209,16 @@ def generate_imageset():
   f_test.close()
 
 def generate_labelmap():
-  f_category = open(CATEGORY_CLOTH_FILE, 'r')
-  lines = f_category.readlines()
-
   f_label_map = open(os.path.join(DATA_DIR, 'label_map.pbtxt'), 'w')
-  for idx, val in enumerate(lines):
-    idx = idx + 1
+  f_category = open(CATEGORY_CLOTH_FILE, 'r')
+  category_lines = f_category.readlines()
+  category_dic = {}
+  for category in category_lines:
+    c_map = re.sub('\\n$', '', category).strip().split()
+    category_dic[c_map[0]] = c_map[1]
     f_label_map.write('item {\n')
-    f_label_map.write('  id: ' + str(idx) + '\n')
-    f_label_map.write('  name: ' + '\'' + re.sub('\\n$', '', val.strip()) + '\'\n')
+    f_label_map.write('  id: ' + str(c_map[0]) + '\n')
+    f_label_map.write('  name: ' + c_map[1] + '\n')
     f_label_map.write('}\n')
   f_category.close()
   f_label_map.close()
