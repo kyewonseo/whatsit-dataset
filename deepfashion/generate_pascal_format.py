@@ -232,8 +232,8 @@ def copy_images():
 
 
 if __name__ == '__main__':
-  # make_directories()
-  # copy_images()
-  # generate_annotation()
-  # generate_imageset()
+  make_directories()
+  copy_images()
+  generate_annotation()
+  generate_imageset()
   generate_labelmap()
