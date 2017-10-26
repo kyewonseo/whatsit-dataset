@@ -218,7 +218,7 @@ def generate_labelmap():
     category_dic[c_map[0]] = c_map[1]
     f_label_map.write('item {\n')
     f_label_map.write('  id: ' + str(c_map[0]) + '\n')
-    f_label_map.write('  name: ' + c_map[1] + '\n')
+    f_label_map.write('  name: ' + '\'' + c_map[1] + '\'' + '\n')
     f_label_map.write('}\n')
   f_category.close()
   f_label_map.close()
@@ -232,8 +232,8 @@ def copy_images():
 
 
 if __name__ == '__main__':
-  make_directories()
-  copy_images()
-  generate_annotation()
-  generate_imageset()
+  # make_directories()
+  # copy_images()
+  # generate_annotation()
+  # generate_imageset()
   generate_labelmap()
