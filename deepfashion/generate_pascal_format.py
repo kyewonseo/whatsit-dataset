@@ -13,7 +13,7 @@ DATASET_DIR = os.path.join(ROOT_DIR, 'dataset')
 DATA_DIR = os.path.join(ROOT_DIR, 'data')
 MODELS_DIR = os.path.join(ROOT_DIR, 'models')
 
-BBOX_FILE = './list_bbox.txt'
+BBOX_FILE = START_DIR +'/list_bbox.txt'
 # CATEGORY_CLOTH_FILE = START_DIR+'./list_category_cloth.txt'
 CATEGORY_CLOTH_FILE = START_DIR + '/list_class.txt'
 CATEGORY_IMG_FILE = START_DIR + '/list_category_img.txt'
