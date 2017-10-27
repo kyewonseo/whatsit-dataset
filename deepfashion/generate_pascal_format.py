@@ -8,15 +8,16 @@ from xml.etree.ElementTree import Element, ElementTree
 
 DEEPFASHION_DIR = '/dataset/img'
 ROOT_DIR = '/tmp/deepfashion'
+START_DIR = './list_30000'
 DATASET_DIR = os.path.join(ROOT_DIR, 'dataset')
 DATA_DIR = os.path.join(ROOT_DIR, 'data')
 MODELS_DIR = os.path.join(ROOT_DIR, 'models')
 
 BBOX_FILE = './list_bbox.txt'
-# CATEGORY_CLOTH_FILE = './list_category_cloth.txt'
-CATEGORY_CLOTH_FILE = './list_class.txt'
-CATEGORY_IMG_FILE = './list_category_img.txt'
-EVAL_PARTITION_FILE = './list_eval_partition.txt'
+# CATEGORY_CLOTH_FILE = START_DIR+'./list_category_cloth.txt'
+CATEGORY_CLOTH_FILE = START_DIR + '/list_class.txt'
+CATEGORY_IMG_FILE = START_DIR + '/list_category_img.txt'
+EVAL_PARTITION_FILE = START_DIR + '/list_eval_partition.txt'
 LABEL_MAP_FILE = 'label_map.pbtxt'
 
 
@@ -44,95 +45,107 @@ def generate_annotation():
     category_img_dic[map[0]] = map[1]
   f_category_img_map.close()
 
+  img_f = open(CATEGORY_IMG_FILE, 'r')
+  img_lines = img_f.readlines()
+
   f = open(BBOX_FILE, 'r')
   lines = f.readlines()
-  for line in lines:
-    colum = line.strip().split()
-    img = colum[0]
-    x_1 = colum[1]
-    y_1 = colum[2]
-    x_2 = colum[3]
-    y_2 = colum[4]
 
-    annotation = Element("annotation")
-    folder = Element("folder")
-    folder.text = 'dataset'
-    filename = Element("filename")
-    filename.text = img
-    source = Element("source")
+  for img_pair in img_lines:
+    map = img_pair.strip().split()
+    # print(map[0])
+    for bbox_pair in lines:
+      bbox_map = bbox_pair.strip().split()
+      if map[0] == bbox_map[0]:
+        print(bbox_map[0])
+        colum = bbox_pair.strip().split()
+        img = colum[0]
+        x_1 = colum[1]
+        y_1 = colum[2]
+        x_2 = colum[3]
+        y_2 = colum[4]
 
-    database = Element("database")
-    database.text = "Fashion Database"
-    annotation2 = Element("annotation")
-    annotation2.text = "BlueHack"
-    image = Element("image")
-    image.text = "bluehack"
-    source.append(database)
-    source.append(annotation2)
-    source.append(image)
+        annotation = Element("annotation")
+        folder = Element("folder")
+        folder.text = 'dataset'
+        filename = Element("filename")
+        filename.text = img
+        source = Element("source")
 
-    annotation.append(folder)
-    annotation.append(filename)
-    annotation.append(source)
+        database = Element("database")
+        database.text = "Fashion Database"
+        annotation2 = Element("annotation")
+        annotation2.text = "BlueHack"
+        image = Element("image")
+        image.text = "bluehack"
+        source.append(database)
+        source.append(annotation2)
+        source.append(image)
 
-    im = Image.open(os.path.join(DATASET_DIR, 'JPEGImages', img))
-    w, h = im.size
+        annotation.append(folder)
+        annotation.append(filename)
+        annotation.append(source)
 
-    size = Element("size")
-    width = Element("width")
-    width.text = str(w)
-    height = Element("height")
-    height.text = str(h)
-    depth = Element("depth")
-    depth.text = '3'
-    size.append(width)
-    size.append(height)
-    size.append(depth)
-    annotation.append(size)
+        im = Image.open(os.path.join(DATASET_DIR, 'JPEGImages', img))
+        w, h = im.size
 
-    segmented = Element("segmented")
-    segmented.text = '0'
-    annotation.append(segmented)
+        size = Element("size")
+        width = Element("width")
+        width.text = str(w)
+        height = Element("height")
+        height.text = str(h)
+        depth = Element("depth")
+        depth.text = '3'
+        size.append(width)
+        size.append(height)
+        size.append(depth)
+        annotation.append(size)
 
-    object = Element("object")
-    name = Element("name")
-    name.text = category_dic[category_img_dic[img]]
-    pose = Element("pose")
-    pose.text = 'Frontal'
-    truncated = Element("truncated")
-    truncated.text = '0'
-    difficult = Element("difficult")
-    difficult.text = '0'
-    bndbox = Element("bndbox")
-    xmin = Element("xmin")
-    ymin = Element("ymin")
-    xmax = Element("xmax")
-    ymax = Element("ymax")
-    xmin.text = x_1
-    ymin.text = y_1
-    xmax.text = x_2
-    ymax.text = y_2
-    bndbox.append(xmin)
-    bndbox.append(ymin)
-    bndbox.append(xmax)
-    bndbox.append(ymax)
-    object.append(name)
-    object.append(pose)
-    object.append(truncated)
-    object.append(difficult)
-    object.append(bndbox)
+        segmented = Element("segmented")
+        segmented.text = '0'
+        annotation.append(segmented)
 
-    annotation.append(object)
-    xml_file = re.sub('\.jpg$', '', os.path.join(DATASET_DIR, 'Annotations', img)) + '.xml'
+        object = Element("object")
+        name = Element("name")
+        name.text = category_dic[category_img_dic[img]]
+        pose = Element("pose")
+        pose.text = 'Frontal'
+        truncated = Element("truncated")
+        truncated.text = '0'
+        difficult = Element("difficult")
+        difficult.text = '0'
+        bndbox = Element("bndbox")
+        xmin = Element("xmin")
+        ymin = Element("ymin")
+        xmax = Element("xmax")
+        ymax = Element("ymax")
+        xmin.text = x_1
+        ymin.text = y_1
+        xmax.text = x_2
+        ymax.text = y_2
+        bndbox.append(xmin)
+        bndbox.append(ymin)
+        bndbox.append(xmax)
+        bndbox.append(ymax)
+        object.append(name)
+        object.append(pose)
+        object.append(truncated)
+        object.append(difficult)
+        object.append(bndbox)
 
-    if not os.path.exists(os.path.dirname(xml_file)):
-      try:
-        os.makedirs(os.path.dirname(xml_file))
-      except OSError as exc:  # Guard against race condition
-        if exc.errno != errno.EEXIST:
-          raise
-    ElementTree(annotation).write(open(xml_file, 'wb'))
-  f.close()
+        annotation.append(object)
+        xml_file = re.sub('\.jpg$', '', os.path.join(DATASET_DIR, 'Annotations', img)) + '.xml'
+
+        if not os.path.exists(os.path.dirname(xml_file)):
+          try:
+            os.makedirs(os.path.dirname(xml_file))
+          except OSError as exc:  # Guard against race condition
+            if exc.errno != errno.EEXIST:
+              raise
+        ElementTree(annotation).write(open(xml_file, 'wb'))
+
+      img_f.close()
+    f.close()
 
 
 def download_image(filename, url):
@@ -228,8 +241,8 @@ def read_bbox():
 
 def copy_images():
   target_dir = os.path.join(DATASET_DIR, 'JPEGImages', 'img')
-  shutil.copytree(DEEPFASHION_DIR, target_dir)
 
+  shutil.copytree(DEEPFASHION_DIR, target_dir)
 
 if __name__ == '__main__':
   make_directories()
